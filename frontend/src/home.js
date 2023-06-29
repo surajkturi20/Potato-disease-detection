@@ -14,10 +14,6 @@ import image from "./bg.png";
 import { DropzoneArea } from 'material-ui-dropzone';
 import { common } from '@material-ui/core/colors';
 import Clear from '@material-ui/icons/Clear';
-
-
-
-
 const ColorButton = withStyles((theme) => ({
   root: {
     color: theme.palette.getContrastText(common.white),
@@ -153,15 +149,18 @@ export const ImageUpload = () => {
   let confidence = 0;
 
   const sendFile = async () => {
+    console.log("Inside sendfile");
     if (image) {
       let formData = new FormData();
       formData.append("file", selectedFile);
       let res = await axios({
         method: "post",
-        url: process.env.REACT_APP_API_URL,
+        url: "http://localhost:8000/predict",
         data: formData,
       });
+      console.log(res)
       if (res.status === 200) {
+        console.log(res.data);
         setData(res.data);
       }
       setIsloading(false);
@@ -188,6 +187,7 @@ export const ImageUpload = () => {
     if (!preview) {
       return;
     }
+    // let isMounted = true;
     setIsloading(true);
     sendFile();
   }, [preview]);
@@ -224,7 +224,7 @@ export const ImageUpload = () => {
           className={classes.gridContainer}
           container
           direction="row"
-          justifyContent="center"
+          justify="center"
           alignItems="center"
           spacing={2}
         >
@@ -234,7 +234,7 @@ export const ImageUpload = () => {
                 <CardMedia
                   className={classes.media}
                   image={preview}
-                  component="image"
+                  component="img"
                   title="Contemplative Reptile"
                 />
               </CardActionArea>
